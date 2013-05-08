@@ -12,6 +12,7 @@
 #
 
 use Modern::Perl '2012';
+use utf8::all;
 use List::Util qw(min max);
 
 ### Proceso ###############################################################
@@ -24,35 +25,35 @@ while ($número_test--) {
 
     if ($budget  and  @Bitcoins_rates > 1) {
 
-	my($minimo, $maximo);
+	my($mínimo, $máximo);
 	my @rates;
 
 	for (my $i = 0; $i < @Bitcoins_rates; $i++) {
 
 	    my $valor = $Bitcoins_rates[$i];
 
-	    if (not defined $minimo  or  $minimo > $valor) {
-		$minimo = $valor;
-		undef $maximo;
+	    if (not defined $mínimo  or  $mínimo > $valor) {
+		$mínimo = $valor;
+		undef $máximo;
 	    }
-	    if (not defined $maximo  or  $maximo < $valor) {
-		$maximo = $valor;
+	    if (not defined $máximo  or  $máximo < $valor) {
+		$máximo = $valor;
 
-		if ($i == $#Bitcoins_rates  or  $Bitcoins_rates[$i+1] < $maximo ) {		# máximo local
-		    next if $maximo == $minimo;
-		    push @rates, [ $minimo, $maximo ];
-		    undef $minimo;
-		    undef $maximo;
+		if ($i == $#Bitcoins_rates  or  $Bitcoins_rates[$i+1] < $máximo ) {
+		    next if $máximo == $mínimo;
+		    push @rates, [ $mínimo, $máximo ];		# encontrado un máximo local
+		    undef $mínimo;
+		    undef $máximo;
 		}
 	    }
 	}
 
 	for (@rates) {
-	    my($minimo, $maximo) = @$_;
+	    my($mínimo, $máximo) = @$_;
 
-	    my $resto = $budget % $minimo;
+	    my $resto = $budget % $mínimo;			# solo podemos hacer cambios con enteros
 
-	    $budget   = ($budget-$resto) / $minimo * $maximo + $resto;
+	    $budget   = ($budget-$resto) / $mínimo * $máximo + $resto;
 	}
     }
 
